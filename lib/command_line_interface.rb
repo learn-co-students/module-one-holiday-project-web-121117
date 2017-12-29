@@ -16,6 +16,7 @@ def main_menu
   puts "'All Characters' to display all available characters"
   puts "'All Actors' to display all available actors"
   puts "'Add Movie' to add a movie to the list"
+  puts "'Delete Movie' to delete a movie from the available collection"
   puts "'Exit'"
   puts " "
 
@@ -30,6 +31,8 @@ def main_menu
     actor_menu
   when "add movie"
     add_movie
+  when "delete movie"
+    delete_movie
   when "exit"
     puts "Goodbye!"
   else
@@ -239,7 +242,20 @@ def add_actor(movie, char)
     add_character(movie)
   end
 end
+################# DELETING A MOVIE #################
+def delete_movie
+  puts "\nType the name of the movie you wish to delete"
+  puts ' '
+  inp = user_input
 
+  if all_movies.include?(inp)
+    movie = Movie.find_by(name:inp)
+    movie.delete
+  else
+    puts "Couldn't find the movie you searched for..."
+    main_menu
+  end
+end
 ################# CREATING ARRAYS #################
 def list_all(array)
   array.each {|element| puts element}
