@@ -1,93 +1,52 @@
 require_relative '../config/environment'
+require_relative 'helper_methods.rb'
+
 
 puts "Lunch Time!"
+puts "What are you in the mood for?"
 
-#ASK WHAT KIND OF FOOD (SELECT BY NUMBER)
-puts "Here are your options:"
-option_number = 1
-style_list = []
-Style.all.each do |style_inst|
-  puts "#{option_number}. #{style_inst.name}"
-  option_number +=1
-  style_list << style_inst.name
-end
-####INPUT LOOP
+#Style of Food?
+style_list = output_style_list
 input = 0
-until input > 0 && input <= option_number
-print "What are you in the mood for today? "
+until input > 0 && input <= style_list.length
+  print "What are you in the mood for today? "
   input = gets.chomp.to_i
 end
-######
-
-
 chosen_style = Style.find_by(name: style_list[input - 1])
 puts "Mmmmmmm #{chosen_style.name}!  Good Choice!!"
 
-
-#DELIVERY OR PICKUP?
+#Delivery or Pickup?
 until input == 'd' || input == 'p'
   print "[D]elivery or [P]ickup? "
   input = gets.chomp.downcase
 end
 
-restaurant_options = []
 if input == 'd'
-  Restaurant.all.each do |rest|
-    if rest.styles.include?(chosen_style) && rest.delivery? == true
-      restaurant_options << rest
-    end
-  end
-  if restaurant_options.length == 0
-    puts "There are no restaurants like that nearby, please try again."
-  else
-    puts "Here are some #{chosen_style.name} restaurants that deliver to Flatiron School."
-    option_number = 1
-    restaurant_options.each do |restaurant|
-      puts "#{option_number}. #{restaurant.name}"
-      option_number +=1
-    end
-  end
+  possible_restaurants = get_restaurant_options(chosen_style)
+  possible_restaurants.select! { |restaurant| restaurant.delivery? == true}
 else
-  Restaurant.all.each do |rest|
-    if rest.styles.include?(chosen_style)
-      restaurant_options << rest
-    end
-  end
-  if restaurant_options.length == 0
-    puts "There are no restaurants like that nearby, please try again."
-  else
-    puts "Here are some nearby #{chosen_style.name} restaurants."
-    option_number = 1
-    restaurant_options.each do |restaurant|
-      puts "#{option_number}. #{restaurant.name}"
-      option_number +=1
-    end
-  end
+  possible_restaurants = get_restaurant_options(chosen_style)
 end
 
+number_of_possibilites = possible_restaurants.length
 
-if restaurant_options.length == 1
-  # PRINT RESTAURANT INFO TO SCREEN
-  puts "#{restaurant_options[0].name}"
-  puts "#{restaurant_options[0].address}"
-  puts "#{restaurant_options[0].phone_number}"
-  puts "Rating: #{restaurant_options[0].rating}"
-  puts "Distance from Flatiron: #{restaurant_options[0].distance} miles"
 
-elsif restaurant_options.length == 0
-  ###start over
-else
-  input = 0
-  until input > 0 && input <= restaurant_options.length
-    print "Enter a number for more information: "
-    input = gets.chomp.to_i
-  end
+#Output Restaurants that fit criteria
+if number_of_possibilites == 0
+    puts "There are no restaurants like that nearby, please try again."
 
-  # PRINT RESTAURANT INFO TO SCREEN
-  i = input - 1
-  puts "#{restaurant_options[i].name}"
-  puts "#{restaurant_options[i].address}"
-  puts "#{restaurant_options[i].phone_number}"
-  puts "Rating: #{restaurant_options[i].rating}"
-  puts "Distance from Flatiron: #{restaurant_options[i].distance} miles"
+elsif number_of_possibilites == 1
+  print_listing(1, possible_restaurants) #only 1 entry
+
+elsif input == 'd' && number_of_possibilites > 1
+  puts "Here are some #{chosen_style.name} restaurants that deliver to Flatiron School."
+  print_restaurant_list(possible_restaurants)
+  choice = get_choice_from_restaurant_list(number_of_possibilites)
+  print_listing(choice, possible_restaurants)
+
+elsif input == 'p' && number_of_possibilites > 1
+  puts "Here are some nearby #{chosen_style.name} restaurants."
+  print_restaurant_list(possible_restaurants)
+  choice = get_choice_from_restaurant_list(number_of_possibilites)
+  print_listing(choice, possible_restaurants)
 end
