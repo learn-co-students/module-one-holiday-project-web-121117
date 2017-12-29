@@ -8,3 +8,8 @@ gem "pry"
 gem "require_all"
 gem "json"
 gem "http"
+gem 'rothko'
+gem 'rainbow'
+gem 'artii'
+gem 'formatador'
+gem 'terminal-table'
