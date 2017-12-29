@@ -14,4 +14,10 @@ class Restaurant < ActiveRecord::Base
     self.order(:price).reverse.first(x)
   end
 
+  def food_style
+    self.styles.map do |style|
+      style.name
+    end
+  end
+
 end
