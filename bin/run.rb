@@ -3,25 +3,28 @@ require_relative 'helper_methods.rb'
 
 def run
   system ("clear")
+
+  #Screen 1 - Select Style of Food
   print_logo
-  #Style of Food?
   style_list = output_style_list
   input = 0
   until input > 0 && input <= style_list.length
+    print_blank_lines(1)
     indent(40)
     print "What are you in the mood for today? ".cyan
     input = gets.chomp.to_i
   end
   chosen_style = Style.find_by(name: style_list[input - 1])
   system ("clear")
+
+  #Screen 2 - Select Delivery or Pickup
   print_logo
   indent(40)
   puts Rainbow("Mmmmmmm #{chosen_style.name}!  Good Choice!!").cyan
   print_blank_lines(2)
-  #Delivery or Pickup?
   until input == 'd' || input == 'p'
     indent(40)
-    print Rainbow("D").cyan.bright + "elivery or " + Rainbow("P").cyan.bright + "ickup? "
+    print "[" + Rainbow("D").cyan.bright + "]elivery or [" + Rainbow("P").cyan.bright + "]ickup? "
     input = gets.chomp.downcase
   end
 
@@ -29,7 +32,8 @@ def run
     possible_restaurants = get_restaurant_options(chosen_style)
     possible_restaurants.select! { |restaurant| restaurant.delivery? == true}
   else
-    possible_restaurants = get_restaurant_options(chosen_style)
+    restaurant_options = get_restaurant_options(chosen_style)
+    possible_restaurants = restaurant_options.sort_by {|restaurant| restaurant.distance}
   end
 
   number_of_possibilites = possible_restaurants.length
@@ -44,6 +48,7 @@ def run
     indent(40)
     puts "There are no restaurants like that nearby, please try again."
     print_blank_lines(4)
+    sleep(1.5)
     run
 
   elsif number_of_possibilites == 1
@@ -52,7 +57,7 @@ def run
 
   elsif input == 'd' && number_of_possibilites > 1
     indent(40)
-    puts Rainbow("Here are some #{chosen_style.name} restaurants that deliver to Flatiron School.")..aliceblue.bright.underline
+    puts Rainbow("Here are some #{chosen_style.name} restaurants that deliver to Flatiron School:")..aliceblue.bright
     print_blank_lines(2)
     print_restaurant_list(possible_restaurants)
     print_blank_lines(2)
@@ -65,7 +70,7 @@ def run
 
   elsif input == 'p' && number_of_possibilites > 1
     indent(40)
-    puts Rainbow("Here are some nearby #{chosen_style.name} restaurants.").aliceblue.bright.underline
+    puts Rainbow("Here are some nearby #{chosen_style.name} restaurants:").aliceblue.bright
     print_blank_lines(2)
     print_restaurant_list(possible_restaurants)
     print_blank_lines(2)

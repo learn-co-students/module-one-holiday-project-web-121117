@@ -28,7 +28,6 @@ def output_style_list
   table_array_two = []
   table_array_three = []
   table_array_four = []
-
   Style.all.each do |style_inst|
     #format for table 4 choices wide
     #column 1
@@ -78,6 +77,11 @@ def get_restaurant_options(style)
     end
   end
   restaurant_options
+end
+
+def get_pickup_options(style)
+  restaurant_options = get_restaurant_options(style)
+  restaurant_options.sort_by {|restaurant| restaurant.distance}
 end
 
 def print_restaurant_list(rest_arr)
