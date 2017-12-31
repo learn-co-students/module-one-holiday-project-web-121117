@@ -159,6 +159,8 @@ class CommandLineInterface
     self.double_space
     puts Rainbow("Rating: #{chosen_restaurant.rating}").aliceblue
     self.double_space
+    puts Rainbow("Price: #{chosen_restaurant.price}").aliceblue
+    self.double_space
     puts Rainbow("Distance from Flatiron: #{chosen_restaurant.distance} miles").aliceblue
   end
 

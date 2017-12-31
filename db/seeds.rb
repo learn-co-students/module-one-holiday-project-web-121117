@@ -31,24 +31,28 @@ def get_add_page(x)
   yelp_entries = search(x).map {|k,v| v}
     #create Restaurant Instances
   yelp_entries[0].each do |restaurant_hash|
-    name = restaurant_hash["name"]
-    # price = restaurant_hash["price"].length #n
-    address = restaurant_hash["location"]["display_address"][0]
-    rating = restaurant_hash["rating"]
-    restaurant_hash["transactions"].include?("delivery") ? delivery = true : delivery = false
-    phone_number = restaurant_hash["display_phone"]
-    distance = (restaurant_hash["distance"] * 0.00062137).round(2)
-    url = restaurant_hash["url"]
+    if restaurant_hash["name"] != "Primary" && restaurant_hash["name"] != "GunBae"
+      name = restaurant_hash["name"]
+      price = restaurant_hash["price"]
+      address = restaurant_hash["location"]["display_address"][0]
+      rating = restaurant_hash["rating"]
+      restaurant_hash["transactions"].include?("delivery") ? delivery = true : delivery = false
+      phone_number = restaurant_hash["display_phone"]
+      distance = (restaurant_hash["distance"] * 0.00062137).round(2)
+      url = restaurant_hash["url"]
 
-    Restaurant.create(name: name, address: address, rating: rating, delivery?: delivery, phone_number: phone_number, distance: distance, url: url) #price: price, -> get this working?
+      Restaurant.create(name: name, address: address, rating: rating, delivery?: delivery, phone_number: phone_number, distance: distance, url: url, price: price)
+    end
   end
   #create Style Instances
   categories_from_yelp = []
   yelp_entries[0].each do |restaurant_hash|
-    restaurant_hash["categories"].each do |hash_arr|
-      hash_arr.each do |k,v|
-        if k == "title"
-          categories_from_yelp << v
+    if restaurant_hash["name"] != "Primary" && restaurant_hash["name"] != "GunBae"
+      restaurant_hash["categories"].each do |hash_arr|
+        hash_arr.each do |k,v|
+          if k == "title"
+            categories_from_yelp << v
+          end
         end
       end
     end
@@ -58,24 +62,26 @@ def get_add_page(x)
   end
   #create RestaurantStyle Instances
   yelp_entries[0].each do |restaurant_hash|
-    relevant_restaurant = Restaurant.find_by(name: restaurant_hash["name"])
-    relevant_styles = []
-    restaurant_hash["categories"].each do |hash_arr|
-      hash_arr.each do |k,v|
-        if k == "title"
-          relevant_styles << Style.find_by(name: v)
+    if restaurant_hash["name"] != "Primary" && restaurant_hash["name"] != "GunBae"
+      relevant_restaurant = Restaurant.find_by(name: restaurant_hash["name"])
+      relevant_styles = []
+      restaurant_hash["categories"].each do |hash_arr|
+        hash_arr.each do |k,v|
+          if k == "title"
+            relevant_styles << Style.find_by(name: v)
+          end
         end
       end
-    end
-    relevant_styles.each do |style_instance|
-      RestaurantStyle.create(restaurant_id: relevant_restaurant.id, style_id: style_instance.id)
+      relevant_styles.each do |style_instance|
+        RestaurantStyle.create(restaurant_id: relevant_restaurant.id, style_id: style_instance.id)
+      end
     end
   end
 end
 
 #######
 offset = 0
-5.times do
+4.times do
   get_add_page(offset)
   offset += 51
 end
