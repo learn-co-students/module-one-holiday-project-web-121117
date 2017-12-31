@@ -55,20 +55,21 @@ class CommandLineInterface
     table_array_two = []
     table_array_three = []
     table_array_four = []
+    column_height = Style.all.length / 4
     Style.all.each do |style_inst|
       #format for table 4 choices wide
       #column 1
-      if option_number <= 13
+      if option_number <= column_height
         table_array_one << "#{option_number}." + " #{style_inst.name}".cyan
         option_number +=1
         style_list << style_inst.name
         #column 2
-      elsif option_number > 13 && option_number <= 26
+      elsif option_number > column_height && option_number <= column_height * 2
         table_array_two << "#{option_number}." + "  #{style_inst.name}".cyan
         option_number +=1
         style_list << style_inst.name
         #column 3
-      elsif option_number > 26 && option_number <= 39
+      elsif option_number > column_height * 2 && option_number <= column_height * 3
         table_array_three << "#{option_number}." + "  #{style_inst.name}".cyan
         option_number +=1
         style_list << style_inst.name
@@ -189,7 +190,7 @@ class CommandLineInterface
     elsif number_of_possibilites == 1
       chosen_restaurant = self.choose_restaurant(1, possible_restaurants)
       self.print_listing(chosen_restaurant) #only 1 entry
-      self.try_again?
+      self.try_again?(chosen_restaurant)
     elsif number_of_possibilites > 1
       self.indent(40)
       puts Rainbow("Here are some #{chosen_style.name} restaurants near Flatiron School:").aliceblue.bright
@@ -215,7 +216,7 @@ class CommandLineInterface
     end
     if input == 'o'
       self.print_exit_message
-      sleep(1.5)
+      sleep(0.5)
       Launchy.open(chosen_restaurant.url)
     elsif input == 't'
       self.run
