@@ -23,11 +23,11 @@ def search
   response.parse
 end
 #####
-lunch_options = search.map {|k,v| v}
+yelp_entries = search.map {|k,v| v}
 
 #SORTING INTO DATABASE
   #create Restaurant Instances
-lunch_options[0].each do |restaurant_hash|
+yelp_entries[0].each do |restaurant_hash|
   name = restaurant_hash["name"]
   # price = restaurant_hash["price"].length #n
   address = restaurant_hash["location"]["display_address"][0]
@@ -35,13 +35,14 @@ lunch_options[0].each do |restaurant_hash|
   restaurant_hash["transactions"].include?("delivery") ? delivery = true : delivery = false
   phone_number = restaurant_hash["display_phone"]
   distance = (restaurant_hash["distance"] * 0.00062137).round(2)
+  url = restaurant_hash["url"]
 
-  Restaurant.create(name: name, address: address, rating: rating, delivery?: delivery, phone_number: phone_number, distance: distance) #price: price, -> get this working?
+  Restaurant.create(name: name, address: address, rating: rating, delivery?: delivery, phone_number: phone_number, distance: distance, url: url) #price: price, -> get this working?
 end
 
 #create Style Instances
 categories_from_yelp = []
-lunch_options[0].each do |restaurant_hash|
+yelp_entries[0].each do |restaurant_hash|
   restaurant_hash["categories"].each do |hash_arr|
     hash_arr.each do |k,v|
       if k == "title"
@@ -55,7 +56,7 @@ categories_from_yelp.uniq.each do |category_name|
 end
 
 #create RestaurantStyle Instances
-lunch_options[0].each do |restaurant_hash|
+yelp_entries[0].each do |restaurant_hash|
   relevant_restaurant = Restaurant.find_by(name: restaurant_hash["name"])
   relevant_styles = []
   restaurant_hash["categories"].each do |hash_arr|
