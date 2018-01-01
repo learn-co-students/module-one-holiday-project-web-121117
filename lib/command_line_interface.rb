@@ -83,8 +83,6 @@ class CommandLineInterface
     pizzas.map {|pizza| puts pizza.name}
   end
 
-  def show_pizza_image(name)
-  end
 
   def manager_access_prompt
     puts "\nChoose from one of the follow options to proceed:"
