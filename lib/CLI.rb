@@ -33,7 +33,7 @@ class CommandLineInterface
   def run
     greet
     input = gets_user_input
-    station_xsinfo = find_station_info(input)
+    station_info = find_station_info(input)
     lines = find_lines(station_info)
     show_lines(lines)
   end

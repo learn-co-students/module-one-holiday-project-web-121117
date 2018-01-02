@@ -16,3 +16,7 @@ clark.lines << two
 hoyt.lines << a
 hoyt.lines << two
 bowling_green.lines << four
+
+fulton_a = StationLine.create(name:"Fulton A")
+a.station_lines << fulton_a
+fulton.station_lines << fulton_a

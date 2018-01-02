@@ -1,11 +1,11 @@
 class Line < ActiveRecord::Base
-  has_many :stations
-  # has_many through :Station
+  has_many :station_lines
+  has_many :stations, through: :station_lines
 
-  def initalize
-    @name = name
-    @station_line_id = station_line_id
-  end
+  # def initalize
+  #   @name = name
+  #   @station_line_id = station_line_id
+  # end
 
 
 end
