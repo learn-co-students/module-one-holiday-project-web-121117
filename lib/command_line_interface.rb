@@ -189,20 +189,10 @@ class CommandLineInterface
       puts "\n"
       manager_access
     elsif input == 'add ingredient'
-      puts "\nHere are the current pizzas at Magic Pizza Parlor:"
-      puts all_pizzas
-      puts "\n\nPlease input name of pizza to add ingredient to:"
+      pre_add_ingredient
       pizza_input = gets.chomp
       current_pizza = find_pizza(pizza_input)
-      puts "\nHere are the current ingredients at Magic Pizza Parlor"
-      puts all_ingredients
-      puts "\n\nPlease input name of ingredient to add to #{current_pizza.name}"
-      ingred_input = gets.chomp
-      new_ingredient = find_ingredient(ingred_input)
-      current_pizza.ingredients << new_ingredient
-      puts "\n#{new_ingredient.name} has been added to #{current_pizza.name}"
-      puts "\n"
-      manager_access
+      add_ingredient(current_pizza)
     elsif input == 'remove ingredient'
       puts "\nHere are the current pizzas as Magic Pizza Parlor:"
       puts all_pizzas
@@ -217,8 +207,6 @@ class CommandLineInterface
       current_ingredient = find_ingredient(ingredient)
       remove_ingredient(current_pizza, current_ingredient)
       puts "\n#{current_ingredient.name} was successfully removed from #{current_pizza.name}:"
-      puts "\n"
-      manager_access
     elsif input == 'update pizza image url'
       puts "\nHere are the current pizzas at Magic Pizza Parlor"
       puts all_pizzas
@@ -279,6 +267,33 @@ class CommandLineInterface
     pizza = Pizza.find_by(name: name)
     pizza.image = url
     pizza.save
+  end
+
+  def pre_add_ingredient
+    puts "\nHere are the current pizzas at Magic Pizza Parlor:"
+    puts all_pizzas
+    puts "\n\nPlease input name of pizza to add ingredient to:"
+  end
+
+  def add_ingredient(current_pizza)
+    puts "\nHere are the current ingredients at Magic Pizza Parlor"
+    puts all_ingredients
+    puts "\n\nPlease input name of ingredient to add to #{current_pizza.name}"
+    ingred_input = gets.chomp
+    new_ingredient = find_ingredient(ingred_input)
+    current_pizza.ingredients << new_ingredient
+    puts "\n#{new_ingredient.name} has been added to #{current_pizza.name}"
+    puts "\nWould you like to add another ingredient. Please type Y or N."
+    user_input = gets.downcase.chomp
+    if user_input == 'y'
+      add_ingredient(current_pizza)
+    elsif user_input == 'n'
+      puts "\n"
+      manager_access
+    else
+      puts "\nNot a valid command. Goind back to Manager field."
+      manager_access
+    end
   end
 
   def remove_ingredient(current_pizza, current_ingredient)
