@@ -19,8 +19,12 @@ class Show < ActiveRecord::Base
       last = ""
       self.all.each do |show_object|
         hold << show_object.name
-        h = show_object.relationships.average(:rating).to_int
-        result[show_object.name] += h
+        if show_object.relationships.average(:rating) == nil
+            result[show_object.name] += 0
+        else
+          h = show_object.relationships.average(:rating).to_int
+          result[show_object.name] += h
+        end
       end
       hold = hold.sort_by { |element| result[element] }
       hold.reverse.each do |show_name|
