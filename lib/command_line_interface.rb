@@ -189,24 +189,22 @@ class CommandLineInterface
       puts "\n"
       manager_access
     elsif input == 'add ingredient'
-      pre_add_ingredient
+      pre_add_or_remove_ingredient
       pizza_input = gets.chomp
       current_pizza = find_pizza(pizza_input)
       add_ingredient(current_pizza)
     elsif input == 'remove ingredient'
-      puts "\nHere are the current pizzas as Magic Pizza Parlor:"
-      puts all_pizzas
-      puts "\nWhich pizza would you like to remove an ingredient from:"
+      pre_add_or_remove_ingredient
       pizza = gets.chomp
-      current_pizza = find_pizza(pizza)
-      puts "\nHere are the current ingredients in #{current_pizza.name}"
-      ingredients = find_ingredients(current_pizza)
-      show_ingredients(ingredients)
-      puts "\nWhich ingredient would you like to remove:"
-      ingredient = gets.chomp
-      current_ingredient = find_ingredient(ingredient)
-      remove_ingredient(current_pizza, current_ingredient)
-      puts "\n#{current_ingredient.name} was successfully removed from #{current_pizza.name}:"
+      remove_ingredient(pizza)
+      # puts "\nHere are the current ingredients in #{current_pizza.name}"
+      # ingredients = find_ingredients(current_pizza)
+      # show_ingredients(ingredients)
+      # puts "\nWhich ingredient would you like to remove:"
+      # ingredient = gets.chomp
+      # current_ingredient = find_ingredient(ingredient)
+      # remove_ingredient(current_pizza, current_ingredient)
+      # puts "\n#{current_ingredient.name} was successfully removed from #{current_pizza.name}:"
     elsif input == 'update pizza image url'
       puts "\nHere are the current pizzas at Magic Pizza Parlor"
       puts all_pizzas
@@ -269,10 +267,10 @@ class CommandLineInterface
     pizza.save
   end
 
-  def pre_add_ingredient
+  def pre_add_or_remove_ingredient
     puts "\nHere are the current pizzas at Magic Pizza Parlor:"
     puts all_pizzas
-    puts "\n\nPlease input name of pizza to add ingredient to:"
+    puts "\n\nPlease input name of pizza to modify:"
   end
 
   def add_ingredient(current_pizza)
@@ -296,9 +294,28 @@ class CommandLineInterface
     end
   end
 
-  def remove_ingredient(current_pizza, current_ingredient)
+  def remove_ingredient(pizza)
+    current_pizza = find_pizza(pizza)
+    puts "\nHere are the current ingredients in #{current_pizza.name}"
+    ingredients = find_ingredients(current_pizza)
+    show_ingredients(ingredients)
+    puts "\nWhich ingredient would you like to remove:"
+    ingredient = gets.chomp
+    current_ingredient = find_ingredient(ingredient)
     removed_ingredient = PizzaIngredient.find_by(pizza_id: current_pizza.id, ingredient_id: current_ingredient.id)
     removed_ingredient.destroy
+    puts "\n#{current_ingredient.name} was successfully removed from #{current_pizza.name}:"
+    puts "\nWould you like to remove another ingredient. Please type Y or N."
+    user_input = gets.downcase.chomp
+    if user_input == 'y'
+      remove_ingredient(pizza)
+    elsif user_input == 'n'
+      puts "\n"
+      manager_access
+    else
+      puts "\nNot a valid command. Goind back to Manager field."
+      manager_access
+    end
   end
 
   def delete_pizza(name)
