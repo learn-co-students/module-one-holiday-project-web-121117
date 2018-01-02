@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180102031724) do
+ActiveRecord::Schema.define(version: 20180102051731) do
 
   create_table "artists", force: :cascade do |t|
     t.string  "name"
@@ -42,6 +42,13 @@ ActiveRecord::Schema.define(version: 20180102031724) do
     t.index ["track_id"], name: "index_playlists_tracks_on_track_id"
   end
 
+  create_table "release_videos", force: :cascade do |t|
+    t.integer "release_id"
+    t.integer "video_id"
+    t.index ["release_id"], name: "index_release_videos_on_release_id"
+    t.index ["video_id"], name: "index_release_videos_on_video_id"
+  end
+
   create_table "releases", force: :cascade do |t|
     t.string  "title"
     t.integer "label_id"
@@ -55,17 +62,15 @@ ActiveRecord::Schema.define(version: 20180102031724) do
     t.string  "title"
     t.integer "release_id"
     t.string  "position"
+    t.integer "video_id"
     t.index ["release_id"], name: "index_tracks_on_release_id"
+    t.index ["video_id"], name: "index_tracks_on_video_id"
   end
 
   create_table "videos", force: :cascade do |t|
-    t.string  "title"
-    t.string  "duration"
-    t.string  "video_id"
-    t.integer "release_id"
-    t.integer "track_id"
-    t.index ["release_id"], name: "index_videos_on_release_id"
-    t.index ["track_id"], name: "index_videos_on_track_id"
+    t.string "title"
+    t.string "duration"
+    t.string "video_id"
   end
 
 end

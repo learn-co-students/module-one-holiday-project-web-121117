@@ -20,9 +20,43 @@ module Wrapper
     end
   end
 
-  def import_tracks(release_id)
-    WRAPPER.get_release(release_id).tracklist.each do |track|
-      new_release.tracks << Track.find_or_create_by(position: track.position, title: track.title, release: new_release)
+  def import_tracks_from_collection
+    requests = 0
+    Release.all.each do |release|
+      if requests >= 55
+        requests = 0
+        sleep(30)
+      end
+      release_info = WRAPPER.get_release(release.discogs_id)
+      puts release_info
+      release_info.tracklist.each do |track|
+        new_track = Track.find_or_create_by(position: track.position, title: track.title, release: release)
+        release.tracks << new_track
+        if release_info.videos
+          all_video_matches = release_info.videos.select do |video|
+            video.title.match(/\B#{track.title}|#{track.title}/i)
+          end
+          matched_video = all_video_matches.last
+          if matched_video
+            matched_video_id = matched_video.uri.split("watch?v=").last
+            new_video = Video.find_or_create_by(title: matched_video.title, duration: "#{matched_video.duration/60}:#{matched_video.duration%60}")
+            new_video.tracks << new_track
+            new_track.video.video_id = matched_video.uri.split("watch?v=").last
+            release.videos << new_video
+          end
+        end
+      end
+      requests += 1
     end
+  end
+
+  def play(tracks=Track.all.take(50))
+    url = "https://www.youtube.com/watch_videos?video_ids="
+    tracks.each do |track|
+      if track.video != nil
+        url << track.video.video_id + ","
+      end
+    end
+    `open #{url}`
   end
 end
