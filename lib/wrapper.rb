@@ -25,10 +25,9 @@ module Wrapper
     Release.all.each do |release|
       if requests >= 55
         requests = 0
-        sleep(30)
+        sleep(60)
       end
       release_info = WRAPPER.get_release(release.discogs_id)
-      puts release_info
       release_info.tracklist.each do |track|
         new_track = Track.find_or_create_by(position: track.position, title: track.title, release: release)
         release.tracks << new_track
