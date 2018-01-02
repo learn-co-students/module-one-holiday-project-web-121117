@@ -197,14 +197,6 @@ class CommandLineInterface
       pre_add_or_remove_ingredient
       pizza = gets.chomp
       remove_ingredient(pizza)
-      # puts "\nHere are the current ingredients in #{current_pizza.name}"
-      # ingredients = find_ingredients(current_pizza)
-      # show_ingredients(ingredients)
-      # puts "\nWhich ingredient would you like to remove:"
-      # ingredient = gets.chomp
-      # current_ingredient = find_ingredient(ingredient)
-      # remove_ingredient(current_pizza, current_ingredient)
-      # puts "\n#{current_ingredient.name} was successfully removed from #{current_pizza.name}:"
     elsif input == 'update pizza image url'
       puts "\nHere are the current pizzas at Magic Pizza Parlor"
       puts all_pizzas
