@@ -1,4 +1,4 @@
-class CreateTrainLine < ActiveRecord::Migration[4.2]
+class CreateLines < ActiveRecord::Migration[4.2]
 
   def change
     create_table :lines do |t|

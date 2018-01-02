@@ -13,6 +13,6 @@ two = Line.create(name: "2")
 fulton.lines << a
 high.lines << a
 clark.lines << two
-hoyt << a
-hoyt << two
-bowling_green << four
+hoyt.lines << a
+hoyt.lines << two
+bowling_green.lines << four

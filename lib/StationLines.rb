@@ -1,6 +1,6 @@
-class StationLines < ActiveRecord::Base
-  belongs_to :Station
-  belongs_to :Line
+class StationLine < ActiveRecord::Base
+  belongs_to :station
+  belongs_to :line
 
   def initalize
     @name = name

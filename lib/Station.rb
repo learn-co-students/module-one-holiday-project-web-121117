@@ -1,5 +1,5 @@
 class Station < ActiveRecord::Base
-  has_many :Line
+  has_many :lines
   # has_many through :TrainLine
 
   def initalize

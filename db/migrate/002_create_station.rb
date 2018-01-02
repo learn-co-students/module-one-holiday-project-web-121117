@@ -1,4 +1,4 @@
-class CreateStation < ActiveRecord::Migration[4.2]
+class CreateStations < ActiveRecord::Migration[4.2]
 
   def change
     create_table :stations do |t|
