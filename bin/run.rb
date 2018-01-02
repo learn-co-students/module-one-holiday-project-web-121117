@@ -1,4 +1,7 @@
 require_relative '../config/environment'
 
-new_cli = CommandLineInterface.new # Why are we calling it this way?
+# enable/disabe SQL log
+ActiveRecord::Base.logger.level = 1
+
+new_cli = CommandLineInterface.new
 new_cli.run
