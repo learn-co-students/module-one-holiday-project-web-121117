@@ -2,7 +2,7 @@ require 'colorize'
 
 class CommandLineInterface
   def greet
-    puts "Welcome".colorize(:color => :blue) + " to".colorize(:color => :yellow) +
+    puts "\nWelcome".colorize(:color => :blue) + " to".colorize(:color => :yellow) +
     " the".colorize(:color => :red) + " Magic".colorize(:color => :green) +
     " Pizza".colorize(:color => :blue) + " Parlor".colorize(:color => :yellow) +
     " App".colorize(:color => :red) + "!".colorize(:color => :green)
@@ -10,12 +10,12 @@ class CommandLineInterface
 
   def options
     puts "\nChoose from one of the follow options to proceed:"
-    puts "     List All Pizzas".colorize(:color => :blue) + " and see all of the options to fill you with happiness."
-    puts "     List All Ingredients".colorize(:color => :blue) + " and see all of our wonderful ingredients."
-    puts "     Pizza Ingredients".colorize(:color => :blue) + " and see which ingredients are in your magical pizza."
-    puts "     Find Ingredient".colorize(:color => :blue) + " and search for pizzas including a specific ingredient."
-    puts "     See Pizza".colorize(:color => :blue) + " and see what you future pizza holds for you."
-    puts "     Exit".colorize(:color => :blue) + " and say goodbye until next time."
+    puts "     List All Pizzas".colorize(:color => :blue) + " - see all of the options to fill you with happiness."
+    puts "     List All Ingredients".colorize(:color => :blue) + " - see all of our wonderful ingredients."
+    puts "     Pizza Ingredients".colorize(:color => :blue) + " - see which ingredients are in your magical pizza."
+    puts "     Find Ingredient".colorize(:color => :blue) + " - search for pizzas including a specific ingredient."
+    puts "     See Pizza".colorize(:color => :blue) + " - see what you future pizza holds for you."
+    puts "     Exit".colorize(:color => :blue) + " - say goodbye until next time."
     puts "\nPlease make a selection:"
     input = gets.downcase.chomp
   end
@@ -132,9 +132,14 @@ class CommandLineInterface
       pre_find_pizza
       new_input = gets.chomp
       pizza = find_pizza(new_input)
+      if pizza.image == nil
+        puts "\nSorry. We haven't taken a picture of that yet. Come back next time."
+        run
+      else
       `open #{pizza.image}`
       puts "\n"
       run
+    end
     elsif input == 'manager access'
       manager_access
     elsif input == 'exit'
