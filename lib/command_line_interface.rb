@@ -122,8 +122,9 @@ class CommandLineInterface
       puts "Please enter 'C', 'R', 'U', 'D', or 'Exit'!"
       puts ''
       crud_selector
+    else
+      selection
     end
-    selection
   end
 
   def trope_or_work_select(crud)
