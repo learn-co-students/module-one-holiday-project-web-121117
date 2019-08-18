@@ -1,2 +1,5 @@
-require_relative 'config/environment'
+require_relative '../config/environment'
 
+
+lunch_time = CommandLineInterface.new
+lunch_time.run
