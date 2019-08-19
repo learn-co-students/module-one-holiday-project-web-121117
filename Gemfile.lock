@@ -15,9 +15,21 @@ GEM
     arel (7.1.4)
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
+    discogs-wrapper (2.4.0)
+      hashie (~> 3.0)
+      httparty (~> 0.14)
+      oauth (~> 0.5.1)
+    hashie (3.5.7)
+    httparty (0.15.6)
+      multi_xml (>= 0.5.2)
     i18n (0.8.1)
     method_source (0.8.2)
+    mini_portile2 (2.3.0)
     minitest (5.10.1)
+    multi_xml (0.6.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
+    oauth (0.5.4)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -44,10 +56,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  discogs-wrapper
+  hashie
+  nokogiri
   pry
   require_all
   sinatra-activerecord
   sqlite3
 
 BUNDLED WITH
-   1.14.6
+   1.16.0
